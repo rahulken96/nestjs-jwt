@@ -7,8 +7,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     username: 'root',
     password: '',
     database: 'turtor-nest-jwt',
-    entities: [
-        __dirname + '/../**/*.entity{.ts,.js}',
-    ],
+    entities: [__dirname + '/../**/*.entity{.ts,.js}',],
     synchronize: true,
 }
