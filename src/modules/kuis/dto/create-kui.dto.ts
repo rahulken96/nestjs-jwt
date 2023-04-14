@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, Length } from "class-validator";
 
 export class CreateKuiDto {
     @IsNotEmpty({ message: 'Quiz harus mempunyai sebuah title.' })
@@ -8,4 +8,8 @@ export class CreateKuiDto {
     @IsNotEmpty({ message: 'Quiz harus mempunyai sebuah desc.' })
     @Length(10, 255, { message: 'Harus mempunyai Description minimal atau lebih dari 3 huruf' })
     description: string
+
+    @IsNotEmpty({ message: 'Quiz harus mempunyai sebuah aktivasi.' })
+    @IsBoolean()
+    isActive: boolean
 }

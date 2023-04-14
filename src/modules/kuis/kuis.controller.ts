@@ -7,22 +7,23 @@ import { UpdateKuiDto } from './dto/update-kui.dto';
 export class KuisController {
   constructor(private readonly kuisService: KuisService) { }
 
+  
+  @Post('/')
+  @HttpCode(200)
+  @UsePipes(ValidationPipe)
+  createQuiz(@Body() quizData: CreateKuiDto) { 
+    return this.kuisService.store(quizData);
+    // return { data: quizData };
+  }
+
   @Get('/')
   getAllQuiz() {
     return this.kuisService.getAllQuiz();
   }
 
-  @Post('/')
-  @HttpCode(200)
-  @UsePipes(ValidationPipe)
-  async createQuiz(@Body() quizData: CreateKuiDto) {
-    // return await this.kuisService.storeQuiz(quizData);
-    return { data: quizData };
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.kuisService.findOne(+id);
+    return this.kuisService.read(+id);
   }
 
   @Patch(':id')

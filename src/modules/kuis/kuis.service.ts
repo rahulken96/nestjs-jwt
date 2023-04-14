@@ -1,32 +1,64 @@
 import { Injectable } from '@nestjs/common';
 import { CreateKuiDto } from './dto/create-kui.dto';
 import { UpdateKuiDto } from './dto/update-kui.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Kui } from './entities/kui.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class KuisService {
+  constructor(
+    @InjectRepository(Kui)
+    private kuiRepo: Repository<Kui>
+  ){}
 
-  getAllQuiz() {
-    return [1, 2, 3, 'Suatu Data String'];
+  
+  async store(kuis: CreateKuiDto) {
+    const res =  await this.kuiRepo.insert(kuis);
+    
+    /* RESPON PROSES */
+    if (res['raw']['affectedRows'] > 0) {
+      return{
+        message: 'Data Berhasil Ditambahkan!',
+        data: kuis
+      }
+    }else{
+      return{
+        message: 'Data Gagal Ditambahkan!',
+        data: kuis
+      }
+    }
   }
 
-  async storeQuiz(quiz: CreateKuiDto) {
-    // return await this.quizRepository.save(quiz);
-    return 'This action adds a new kui';
+  async getAllQuiz(){
+    const res = await this.kuiRepo.find();
+    
+    if (!res) {
+      return {message: "Data Tidak Ditemukan"};
+    }else{
+      return res;
+    } 
   }
 
-  findAll() {
-    return `This action returns all kuis`;
-  }
+  async read(id: number){
+    const res = await this.kuiRepo.find({where: {id: id}});
 
-  findOne(id: number) {
-    return `This action returns a #${id} kui`;
+    if (!res) {
+      return {message: "Data Tidak Ditemukan"};
+    }else{
+      return res;
+    } 
   }
 
   update(id: number, updateKuiDto: UpdateKuiDto) {
-    return `This action updates a #${id} kui`;
+    return `This action updates a ${id} kui`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} kui`;
   }
 }
+function Args(arg0: string, arg1: { type: () => any; }): (target: KuisService, propertyKey: "read", parameterIndex: 0) => void {
+  throw new Error('Function not implemented.');
+}
+
